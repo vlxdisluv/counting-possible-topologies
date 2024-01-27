@@ -1,6 +1,15 @@
 import { generateTopologies } from './index';
 
 describe('generateTopologies', () => {
+  it('should generate all possible topologies for input A = []', () => {
+    const A = [1];
+    const expectedTopologyLength = 1;
+
+    const result = generateTopologies(A);
+
+    expect(result.length).toEqual(expectedTopologyLength);
+  });
+
   it('should generate all possible topologies for input A = [1]', () => {
     const A = [1];
     const expectedTopologyLength = 1;

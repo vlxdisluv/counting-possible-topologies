@@ -19,7 +19,7 @@ function powerSet<T extends NumberSet | Topology[]>(set: T): Topology | Topology
 }
 
 function isClosedUnderUnion(sets: Topology): boolean {
-  const setsAsStrings = sets.map((set) => set.sort().join(','));
+  const setsAsStrings = sets.map((set) => set.join(','));
 
   function setExists(union: Set<number>): boolean {
     const unionString = Array.from(union).sort().join(',');
@@ -27,7 +27,7 @@ function isClosedUnderUnion(sets: Topology): boolean {
   }
 
   for (let i = 0; i < sets.length; i++) {
-    for (let j = 0; j < sets.length; j++) {
+    for (let j = i + 1; j < sets.length; j++) {
       const union = new Set([...sets[i], ...sets[j]]);
 
       if (!setExists(union)) {
@@ -40,17 +40,15 @@ function isClosedUnderUnion(sets: Topology): boolean {
 }
 
 function isClosedUnderIntersection(sets: Topology): boolean {
-  const setsAsStrings = new Set<string>(
-    sets.map((set) => set.sort((a, b) => a - b).join(','))
-  );
+  const setsAsStrings = new Set<string>(sets.map((set) => set.join(',')));
 
   function setExists(intersection: number[]): boolean {
-    const key = intersection.sort((a, b) => a - b).join(',');
+    const key = intersection.join(',');
     return setsAsStrings.has(key);
   }
 
   for (let i = 0; i < sets.length; i++) {
-    for (let j = 0; j < sets.length; j++) {
+    for (let j = i + 1; j < sets.length; j++) {
       const intersection = sets[i].filter((element) => sets[j].includes(element));
 
       if (!setExists(intersection)) {
@@ -64,7 +62,7 @@ function isClosedUnderIntersection(sets: Topology): boolean {
 
 function isTopology(sets: Topology, set: NumberSet): boolean {
   const containsEmptySet = sets.some((s) => s.length === 0);
-  const containsSet = sets.some((s) => s.sort().join(',') === set.sort().join(','));
+  const containsSet = sets.some((s) => s.join(',') === set.join(','));
 
   return (
     containsEmptySet &&
@@ -84,11 +82,12 @@ export function generateTopologies(set: NumberSet): Topology[] {
   return topologies;
 }
 
+const A0: NumberSet = [];
 const A1: NumberSet = [1];
 const A2: NumberSet = [1, 2];
 const A3: NumberSet = [1, 2, 3];
 const A4: NumberSet = [1, 2, 3, 4];
 
-const result = [A1, A2, A3, A4].map((A) => generateTopologies(A).length);
+const result = [A0, A1, A2, A3, A4].map((A) => generateTopologies(A).length);
 
 console.log('result', result);
